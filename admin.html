@@ -181,9 +181,9 @@ form.addEventListener("submit", async function(event) {
                 password
             );
 
-        message.textContent =
-            "Login successful! Welcome, " +
-            userCredential.user.email;
+       message.textContent = "Login successful!";
+
+window.location.href = "dashboard.html";
 
         passwordInput.value = "";
 
