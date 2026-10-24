@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Owner Dashboard</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #eaf1fa;
+    margin: 0;
+    padding: 20px;
+}
+
+.box {
+    max-width: 600px;
+    margin: 40px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px #00000015;
+}
+
+h1 {
+    color: #12345a;
+}
+
+button {
+    padding: 12px;
+    background: #12345a;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+#status {
+    color: #555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h1>Owner Dashboard</h1>
+
+<p id="status">Checking login...</p>
+
+<button id="logoutButton">Logout</button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+}
+from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyByxJxq9kMNoTrzLfmmYFK-r9vYKVfGO68",
+    authDomain: "utkarsh-knowledge-point.firebaseapp.com",
+    projectId: "utkarsh-knowledge-point",
+    storageBucket: "utkarsh-knowledge-point.firebasestorage.app",
+    messagingSenderId: "607719849434",
+    appId: "1:607719849434:web:5bc0a6b32644476c1354e3"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const status = document.getElementById("status");
+
+onAuthStateChanged(auth, function(user) {
+
+    if (user) {
+        status.textContent =
+            "Welcome Owner: " + user.email;
+    } else {
+        window.location.href = "admin.html";
+    }
+
+});
+
+document.getElementById("logoutButton")
+.addEventListener("click", async function() {
+
+    await signOut(auth);
+
+    window.location.href = "admin.html";
+
+});
+
+</script>
+
+</body>
+</html>
