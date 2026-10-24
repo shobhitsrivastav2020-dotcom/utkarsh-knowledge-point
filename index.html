@@ -382,5 +382,23 @@ footer {
 
 </footer>
 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/13.1.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyByxJxq9kMNoTrzLfmmYFK-r9vYKVfGO68",
+    authDomain: "utkarsh-knowledge-point.firebaseapp.com",
+    projectId: "utkarsh-knowledge-point",
+    storageBucket: "utkarsh-knowledge-point.firebasestorage.app",
+    messagingSenderId: "607719849434",
+    appId: "1:607719849434:web:5bc0a6b32644476c1354e3"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+</script>
+
+    
 </body>
 </html>
