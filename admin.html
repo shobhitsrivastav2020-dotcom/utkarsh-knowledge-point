@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +9,10 @@
 <title>Owner Login - Utkarsh Knowledge Point</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     background: #eaf1fa;
@@ -16,11 +21,12 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    padding: 20px;
 }
 
 .login-box {
     background: white;
-    width: 90%;
+    width: 100%;
     max-width: 380px;
     padding: 30px;
     border-radius: 15px;
@@ -30,6 +36,7 @@ body {
 h1 {
     color: #12345a;
     text-align: center;
+    font-size: 27px;
 }
 
 p {
@@ -41,9 +48,9 @@ input {
     width: 100%;
     padding: 13px;
     margin-top: 15px;
-    box-sizing: border-box;
     border: 1px solid #ccc;
     border-radius: 7px;
+    font-size: 16px;
 }
 
 button {
@@ -55,10 +62,18 @@ button {
     border: none;
     border-radius: 7px;
     cursor: pointer;
+    font-size: 16px;
 }
 
 button:disabled {
     opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#message {
+    margin-top: 15px;
+    font-size: 14px;
+    overflow-wrap: anywhere;
 }
 
 a {
@@ -66,11 +81,6 @@ a {
     text-align: center;
     margin-top: 20px;
     color: #12345a;
-}
-
-#message {
-    margin-top: 15px;
-    font-size: 14px;
 }
 </style>
 </head>
@@ -109,7 +119,9 @@ a {
 
     <p id="message" role="status"></p>
 
-    <a href="index.html">Back to Students Website</a>
+    <a href="index.html">
+        Back to Students Website
+    </a>
 
 </div>
 
@@ -134,35 +146,50 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const auth = getAuth(app);
 
 const form = document.getElementById("loginForm");
+
+const emailInput = document.getElementById("email");
+
+const passwordInput = document.getElementById("password");
+
 const message = document.getElementById("message");
+
 const loginButton = document.getElementById("loginButton");
+
 
 form.addEventListener("submit", async function(event) {
 
     event.preventDefault();
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+    const email = emailInput.value.trim();
 
-    message.textContent = "Logging in...";
+    const password = passwordInput.value;
+
+    message.textContent = "Please wait...";
+
     loginButton.disabled = true;
 
     try {
 
-        const result = await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
+        const userCredential =
+            await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
 
         message.textContent =
             "Login successful! Welcome, " +
-            result.user.email;
+            userCredential.user.email;
+
+        passwordInput.value = "";
 
     } catch (error) {
+
+        console.error("Firebase Login Error:", error);
 
         if (
             error.code === "auth/invalid-credential" ||
@@ -171,12 +198,26 @@ form.addEventListener("submit", async function(event) {
         ) {
 
             message.textContent =
-                "Email or password is incorrect.";
+                "Incorrect email or password.";
+
+        } else if (
+            error.code === "auth/invalid-email"
+        ) {
+
+            message.textContent =
+                "Please enter a valid email address.";
+
+        } else if (
+            error.code === "auth/too-many-requests"
+        ) {
+
+            message.textContent =
+                "Too many attempts. Please try later.";
 
         } else {
 
             message.textContent =
-                "Login failed: " + error.message;
+                "Login error: " + error.code;
 
         }
 
